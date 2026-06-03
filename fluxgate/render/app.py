@@ -49,6 +49,7 @@ class App:
         self.headless = headless
         if headless:
             os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
+            os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
         pygame.init()
         pygame.font.init()
         self.fw = C.GRID_W * CELL
