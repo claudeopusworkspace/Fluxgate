@@ -316,6 +316,22 @@ def test_must_pick_augment_before_next_wave():
 # --------------------------------------------------------------------------- #
 # Full-run smoke
 # --------------------------------------------------------------------------- #
+def test_endless_does_not_retrigger_victory():
+    g = GameState(seed=4)
+    g.endless = True
+    g.wave_index = 34
+    g.phase = PHASE_COMBAT
+    g.cur_wave = generate_wave(g.seed, 34)
+    g._group_state = []  # no pending spawns
+    g.tick(C.DT)         # spawning done + no enemies -> wave ends
+    assert g.phase == PHASE_BUILD          # not VICTORY
+    assert g.offered_augments              # endless keeps offering augments
+    # waves still generate and scale past the campaign
+    w40 = generate_wave(g.seed, 40)
+    assert w40.total_enemies >= 1
+    assert any(grp.enemy_type == "boss" for grp in w40.groups)  # boss every 10th
+
+
 def test_headless_run_terminates():
     g = _run_headless(11, ticks=20000)
     assert g.phase in (PHASE_BUILD, PHASE_COMBAT, PHASE_VICTORY, PHASE_DEFEAT)

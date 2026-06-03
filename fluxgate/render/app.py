@@ -240,6 +240,7 @@ class App:
         elif key == "newrun":
             self.state = "menu"
         elif key == "endless":
+            g.endless = True
             g.phase = PHASE_BUILD
             g._offer_augments()
 

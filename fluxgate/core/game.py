@@ -99,6 +99,7 @@ class GameState:
 
         self.phase = PHASE_BUILD
         self.wave_index = 0           # 0 == not started
+        self.endless = False          # set once the player continues past wave 30
         self.time = 0.0               # total sim seconds
         self.mods = Modifiers()
 
@@ -235,7 +236,7 @@ class GameState:
         bonus = int(bonus * self.diff["money"])
         self._gain_money(bonus)
         self.stats.waves_cleared += 1
-        if self.wave_index >= C.TOTAL_WAVES:
+        if not self.endless and self.wave_index >= C.TOTAL_WAVES:
             self.phase = PHASE_VICTORY
             return
         self._offer_augments()

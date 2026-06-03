@@ -66,7 +66,8 @@ def generate_wave(seed: int, wave: int, difficulty: str = "normal") -> Wave:
     groups: List[SpawnGroup] = []
 
     # Boss waves: spend most budget on a boss + a support escort.
-    is_boss = wave in C.BOSS_WAVES
+    # Past the campaign, every 10th wave is a boss to keep endless climactic.
+    is_boss = wave in C.BOSS_WAVES or (wave > C.TOTAL_WAVES and wave % 10 == 0)
     if is_boss:
         boss_hp = C.ENEMIES["boss"]["base_hp"] * hp_scale * (1.0 + 0.15 * (wave // 10))
         groups.append(SpawnGroup("boss", 1, 1.0, 0.0,
